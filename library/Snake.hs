@@ -94,11 +94,17 @@ handleResize :: (Int, Int) -> World -> World
 handleResize newResolution world = world { resolution = newResolution }
 
 handleKey :: G.Key -> G.KeyState -> World -> World
-handleKey key state world = case (key, state) of
-    (G.SpecialKey G.KeyUp, G.Down) -> world { direction = North }
-    (G.SpecialKey G.KeyRight, G.Down) -> world { direction = East }
-    (G.SpecialKey G.KeyDown, G.Down) -> world { direction = South }
-    (G.SpecialKey G.KeyLeft, G.Down) -> world { direction = West }
+handleKey key state world = case state of
+    G.Down -> case key of
+        G.SpecialKey G.KeyUp ->
+            world { direction = if direction world == South then South else North }
+        G.SpecialKey G.KeyRight ->
+            world { direction = if direction world == West then West else East }
+        G.SpecialKey G.KeyDown ->
+            world { direction = if direction world == North then North else South }
+        G.SpecialKey G.KeyLeft ->
+            world { direction = if direction world == East then East else West }
+        _ -> world
     _ -> world
 
 --
