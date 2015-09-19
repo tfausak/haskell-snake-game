@@ -31,6 +31,7 @@ initialWorld = NewWorld
     { resolution = (512, 512)
     , direction = North
     , scale = 10
+    , snake = [(0, -1), (0, 0), (0, 1)]
     }
 
 drawWorld :: World -> G.Picture
@@ -56,10 +57,7 @@ drawBounds world =
     in  G.rectangleWire x x
 
 drawSnake :: World -> G.Picture
-drawSnake world = G.pictures
-    [ drawBox (1, 1) world
-    , drawBox (2, 2) world
-    ]
+drawSnake world = G.pictures (map (\ p -> drawBox p world) (snake world))
 
 drawBox :: (Int, Int) -> World -> G.Picture
 drawBox (x, y) world =
@@ -87,6 +85,7 @@ data World = NewWorld
     { resolution :: (Int, Int)
     , direction :: Direction
     , scale :: Int
+    , snake :: [(Int, Int)]
     } deriving (Eq, Ord, Read, Show)
 
 size :: (Num a) => World -> a
