@@ -48,13 +48,12 @@ drawWorld world = G.pictures
     ]
 
 handleEvent :: G.Event -> World -> World
-handleEvent event world =
-    if isOver world
-    then world
-    else case event of
-        G.EventResize newResolution -> handleResize newResolution world
-        G.EventKey key state _ _ -> handleKey key state world
-        _ -> world
+handleEvent event world = case event of
+    G.EventResize newResolution -> handleResize newResolution world
+    G.EventKey key state _ _ -> if isOver world
+        then world
+        else handleKey key state world
+    _ -> world
 
 handleStep :: Float -> World -> World
 handleStep _time world =
