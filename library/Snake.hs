@@ -30,11 +30,13 @@ initialWorld :: World
 initialWorld = NewWorld
     { resolution = (512, 512)
     , direction = North
+    , scale = 10
     }
 
 drawWorld :: World -> G.Picture
 drawWorld world = G.pictures
     [ drawBounds world
+    , drawSnake world
     ]
 
 handleEvent :: G.Event -> World -> World
@@ -50,9 +52,13 @@ handleStep _time world = world
 
 drawBounds :: World -> G.Picture
 drawBounds world =
-    let (width, height) = resolution world
-        size = fromIntegral (min width height)
-    in  G.rectangleWire size size
+    let x = size world
+    in  G.rectangleWire x x
+
+drawSnake :: World -> G.Picture
+drawSnake world =
+    let x = size world / fromIntegral (scale world)
+    in  G.rectangleSolid x x
 
 --
 
@@ -72,7 +78,13 @@ handleKey key state world = case (key, state) of
 data World = NewWorld
     { resolution :: (Int, Int)
     , direction :: Direction
+    , scale :: Int
     } deriving (Eq, Ord, Read, Show)
+
+size :: (Num a) => World -> a
+size world =
+    let (width, height) = resolution world
+    in  fromIntegral (min width height)
 
 data Direction
     = North
