@@ -49,11 +49,12 @@ handleEvent event world = case event of
 handleStep :: Float -> World -> World
 handleStep _time world =
     let newSnake@((x, y) : _) = init (snake world)
-    in  case direction world of
-        North -> world { snake = (x, y + 1) : newSnake }
-        East -> world { snake = (x + 1, y) : newSnake }
-        South -> world { snake = (x, y - 1) : newSnake }
-        West -> world { snake = (x - 1, y) : newSnake }
+        (x', y') = case direction world of
+            North -> (x, y + 1)
+            East -> (x + 1, y)
+            South -> (x, y - 1)
+            West -> (x - 1, y)
+    in  world { snake = (x', y') : newSnake }
 
 --
 
