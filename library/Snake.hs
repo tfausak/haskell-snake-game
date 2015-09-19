@@ -97,7 +97,10 @@ drawBox (x, y) world =
 
 drawGameOver :: World -> G.Picture
 drawGameOver world = if isOver world
-    then G.color G.red (G.scale 0.2 0.2 (G.text "game over"))
+    then G.pictures
+        [ G.color G.red (G.scale 0.2 0.2 (G.text "game over"))
+        , G.color G.blue (G.translate 0 (-50) (G.scale 0.2 0.2 (G.text ("score: " ++ show (length (snake world))))))
+        ]
     else G.blank
 
 --
