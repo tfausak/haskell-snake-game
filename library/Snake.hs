@@ -62,7 +62,7 @@ handleStep _time world =
                 East -> (x + 1, y)
                 South -> (x, y - 1)
                 West -> (x - 1, y)
-        in  if inBounds world (x', y')
+        in  if inBounds world (x', y') && not (isSnake world (x', y'))
             then world { snake = (x', y') : newSnake }
             else world { isOver = True }
 
@@ -126,6 +126,9 @@ inBounds :: World -> (Int, Int) -> Bool
 inBounds world (x, y) =
     let s = scale world `div` 2
     in  -s <= x && x <= s && -s <= y && y <= s
+
+isSnake :: World -> (Int, Int) -> Bool
+isSnake world (x, y) = any (== (x, y)) (snake world)
 
 data Direction
     = North
