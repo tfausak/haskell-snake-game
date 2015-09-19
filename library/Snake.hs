@@ -60,7 +60,8 @@ handleStep _time world =
     if isOver world
     then world
     else
-        let newSnake@((x, y) : _) = init (snake world)
+        let oldSnake = snake world
+            newSnake@((x, y) : _) = init oldSnake
             (x', y') = case direction world of
                 North -> (x, y + 1)
                 East -> (x + 1, y)
@@ -68,7 +69,9 @@ handleStep _time world =
                 West -> (x - 1, y)
         in  if inBounds world (x', y') && not (isSnake world (x', y'))
             then if isFood world (x', y')
-                then world -- TODO
+                then
+                    let world' = moveFood world
+                    in  world' { snake = (x', y') : oldSnake }
                 else world { snake = (x', y') : newSnake }
             else world { isOver = True }
 
@@ -143,6 +146,17 @@ isSnake world (x, y) = any (== (x, y)) (snake world)
 
 isFood :: World -> (Int, Int) -> Bool
 isFood world (x, y) = (x, y) == food world
+
+moveFood :: World -> World
+moveFood world =
+    let g0 = gen world
+        a = scale world `div` 2
+        (x, g1) = R.randomR (-a, a) g0
+        (y, g2) = R.randomR (-a, a) g1
+    in  world
+        { gen = g2
+        , food = (x, y)
+        }
 
 data Direction
     = North
