@@ -67,7 +67,9 @@ handleStep _time world =
                 South -> (x, y - 1)
                 West -> (x - 1, y)
         in  if inBounds world (x', y') && not (isSnake world (x', y'))
-            then world { snake = (x', y') : newSnake }
+            then if isFood world (x', y')
+                then world -- TODO
+                else world { snake = (x', y') : newSnake }
             else world { isOver = True }
 
 --
@@ -138,6 +140,9 @@ inBounds world (x, y) =
 
 isSnake :: World -> (Int, Int) -> Bool
 isSnake world (x, y) = any (== (x, y)) (snake world)
+
+isFood :: World -> (Int, Int) -> Bool
+isFood world (x, y) = (x, y) == food world
 
 data Direction
     = North
