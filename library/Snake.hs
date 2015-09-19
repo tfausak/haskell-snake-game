@@ -32,31 +32,39 @@ initialWorld = NewWorld
     , direction = North
     , scale = 11
     , snake = [(0, 2), (0, 1), (0, 0), (0, -1), (0, -2)]
+    , isOver = False
     }
 
 drawWorld :: World -> G.Picture
 drawWorld world = G.pictures
     [ drawBounds world
     , drawSnake world
+    , drawGameOver world
     ]
 
 handleEvent :: G.Event -> World -> World
-handleEvent event world = case event of
-    G.EventResize newResolution -> handleResize newResolution world
-    G.EventKey key state _ _ -> handleKey key state world
-    _ -> world
+handleEvent event world =
+    if isOver world
+    then world
+    else case event of
+        G.EventResize newResolution -> handleResize newResolution world
+        G.EventKey key state _ _ -> handleKey key state world
+        _ -> world
 
 handleStep :: Float -> World -> World
 handleStep _time world =
-    let newSnake@((x, y) : _) = init (snake world)
-        (x', y') = case direction world of
-            North -> (x, y + 1)
-            East -> (x + 1, y)
-            South -> (x, y - 1)
-            West -> (x - 1, y)
-    in  if inBounds world (x', y')
-        then world { snake = (x', y') : newSnake }
-        else world -- TODO
+    if isOver world
+    then world
+    else
+        let newSnake@((x, y) : _) = init (snake world)
+            (x', y') = case direction world of
+                North -> (x, y + 1)
+                East -> (x + 1, y)
+                South -> (x, y - 1)
+                West -> (x - 1, y)
+        in  if inBounds world (x', y')
+            then world { snake = (x', y') : newSnake }
+            else world { isOver = True }
 
 --
 
@@ -74,6 +82,11 @@ drawBox (x, y) world =
         x' = s * fromIntegral x
         y' = s * fromIntegral y
     in  G.translate x' y' (G.rectangleSolid s s)
+
+drawGameOver :: World -> G.Picture
+drawGameOver world = if isOver world
+    then G.color G.red (G.scale 0.2 0.2 (G.text "game over"))
+    else G.blank
 
 --
 
@@ -95,6 +108,7 @@ data World = NewWorld
     , direction :: Direction
     , scale :: Int
     , snake :: [(Int, Int)]
+    , isOver :: Bool
     } deriving (Eq, Ord, Read, Show)
 
 size :: (Num a) => World -> a
