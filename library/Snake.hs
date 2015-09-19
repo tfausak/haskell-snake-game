@@ -56,9 +56,17 @@ drawBounds world =
     in  G.rectangleWire x x
 
 drawSnake :: World -> G.Picture
-drawSnake world =
-    let x = size world / fromIntegral (scale world)
-    in  G.rectangleSolid x x
+drawSnake world = G.pictures
+    [ drawBox (1, 1) world
+    , drawBox (2, 2) world
+    ]
+
+drawBox :: (Int, Int) -> World -> G.Picture
+drawBox (x, y) world =
+    let s = size world / fromIntegral (scale world)
+        x' = s * fromIntegral x
+        y' = s * fromIntegral y
+    in  G.translate x' y' (G.rectangleSolid s s)
 
 --
 
