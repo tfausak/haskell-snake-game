@@ -31,7 +31,7 @@ initialWorld = NewWorld
     { resolution = (512, 512)
     , direction = North
     , scale = 10
-    , snake = [(0, -1), (0, 0), (0, 1)]
+    , snake = [(0, 1), (0, 0), (0, -1)]
     }
 
 drawWorld :: World -> G.Picture
@@ -47,7 +47,13 @@ handleEvent event world = case event of
     _ -> world
 
 handleStep :: Float -> World -> World
-handleStep _time world = world
+handleStep _time world =
+    let newSnake@((x, y) : _) = init (snake world)
+    in  case direction world of
+        North -> world { snake = (x, y + 1) : newSnake }
+        East -> world { snake = (x + 1, y) : newSnake }
+        South -> world { snake = (x, y - 1) : newSnake }
+        West -> world { snake = (x - 1, y) : newSnake }
 
 --
 
