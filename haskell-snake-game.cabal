@@ -1,0 +1,19 @@
+name: haskell-snake-game
+version: 0.0.0
+cabal-version: >=1.10
+build-type: Simple
+license: MIT
+license-file: LICENSE.md
+maintainer: Taylor Fausak
+synopsis: The snake game.
+description:
+    <https://en.wikipedia.org/wiki/Snake_(video_game)>
+category: Game
+
+source-repository head
+    type: git
+    location: https://github.com/tfausak/haskell-snake-game
+
+library
+    default-language: Haskell2010
+
