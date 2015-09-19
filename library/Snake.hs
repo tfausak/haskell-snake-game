@@ -29,14 +29,14 @@ stepRate :: Int
 stepRate = 2
 
 initialWorld :: Int -> World
-initialWorld seed = NewWorld
+initialWorld seed = moveFood NewWorld
     { resolution = (512, 512)
     , direction = North
     , scale = 11
     , snake = [(0, 2), (0, 1), (0, 0), (0, -1), (0, -2)]
     , isOver = False
     , gen = R.mkStdGen seed
-    , food = (2, 2)
+    , food = (0, 0)
     }
 
 drawWorld :: World -> G.Picture
