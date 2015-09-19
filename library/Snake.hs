@@ -5,7 +5,8 @@ import qualified System.Random as R
 
 main :: IO ()
 main = do
-    let world = initialWorld
+    seed <- R.randomIO
+    let world = initialWorld seed
 
     G.play
         (displayMode world)
@@ -27,14 +28,14 @@ backgroundColor = G.white
 stepRate :: Int
 stepRate = 2
 
-initialWorld :: World
-initialWorld = NewWorld
+initialWorld :: Int -> World
+initialWorld seed = NewWorld
     { resolution = (512, 512)
     , direction = North
     , scale = 11
     , snake = [(0, 2), (0, 1), (0, 0), (0, -1), (0, -2)]
     , isOver = False
-    , gen = R.mkStdGen 0
+    , gen = R.mkStdGen seed
     }
 
 drawWorld :: World -> G.Picture
