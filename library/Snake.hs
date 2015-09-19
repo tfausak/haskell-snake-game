@@ -28,12 +28,14 @@ stepRate = 1
 
 initialWorld :: World
 initialWorld = NewWorld
-    { resolution = (640, 480)
+    { resolution = (512, 512)
     , direction = North
     }
 
 drawWorld :: World -> G.Picture
-drawWorld _world = G.blank
+drawWorld world = G.pictures
+    [ drawBounds world
+    ]
 
 handleEvent :: G.Event -> World -> World
 handleEvent event world = case event of
@@ -43,6 +45,14 @@ handleEvent event world = case event of
 
 handleStep :: Float -> World -> World
 handleStep _time world = world
+
+--
+
+drawBounds :: World -> G.Picture
+drawBounds world =
+    let (width, height) = resolution world
+        size = fromIntegral (min width height)
+    in  G.rectangleWire size size
 
 --
 
