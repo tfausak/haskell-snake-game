@@ -54,7 +54,9 @@ handleStep _time world =
             East -> (x + 1, y)
             South -> (x, y - 1)
             West -> (x - 1, y)
-    in  world { snake = (x', y') : newSnake }
+    in  if inBounds world (x', y')
+        then world { snake = (x', y') : newSnake }
+        else world -- TODO
 
 --
 
@@ -99,6 +101,11 @@ size :: (Num a) => World -> a
 size world =
     let (width, height) = resolution world
     in  fromIntegral (min width height)
+
+inBounds :: World -> (Int, Int) -> Bool
+inBounds world (x, y) =
+    let s = scale world `div` 2
+    in  -s <= x && x <= s && -s <= y && y <= s
 
 data Direction
     = North
