@@ -156,10 +156,9 @@ moveFood world =
         a = scale world `div` 2
         (x, g1) = R.randomR (-a, a) g0
         (y, g2) = R.randomR (-a, a) g1
-    in  world
-        { gen = g2
-        , food = (x, y)
-        }
+    in  if isSnake world (x, y)
+        then moveFood world { gen = g2 }
+        else world { gen = g2 , food = (x, y) }
 
 data Direction
     = North
