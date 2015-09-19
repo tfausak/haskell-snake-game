@@ -24,14 +24,14 @@ backgroundColor :: G.Color
 backgroundColor = G.white
 
 stepRate :: Int
-stepRate = 1
+stepRate = 2
 
 initialWorld :: World
 initialWorld = NewWorld
     { resolution = (512, 512)
     , direction = North
-    , scale = 10
-    , snake = [(0, 1), (0, 0), (0, -1)]
+    , scale = 11
+    , snake = [(0, 2), (0, 1), (0, 0), (0, -1), (0, -2)]
     }
 
 drawWorld :: World -> G.Picture
