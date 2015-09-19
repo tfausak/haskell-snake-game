@@ -36,11 +36,13 @@ initialWorld seed = NewWorld
     , snake = [(0, 2), (0, 1), (0, 0), (0, -1), (0, -2)]
     , isOver = False
     , gen = R.mkStdGen seed
+    , food = (2, 2)
     }
 
 drawWorld :: World -> G.Picture
 drawWorld world = G.pictures
     [ drawBounds world
+    , drawFood world
     , drawSnake world
     , drawGameOver world
     ]
@@ -75,6 +77,9 @@ drawBounds :: World -> G.Picture
 drawBounds world =
     let x = size world
     in  G.rectangleWire x x
+
+drawFood :: World -> G.Picture
+drawFood world = G.color G.green (drawBox (food world) world)
 
 drawSnake :: World -> G.Picture
 drawSnake world = G.pictures (map (\ p -> drawBox p world) (snake world))
@@ -119,6 +124,7 @@ data World = NewWorld
     , snake :: [(Int, Int)]
     , isOver :: Bool
     , gen :: R.StdGen
+    , food :: (Int, Int)
     } deriving (Read, Show)
 
 size :: (Num a) => World -> a
