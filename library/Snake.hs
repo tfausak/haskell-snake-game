@@ -86,7 +86,12 @@ drawFood :: World -> G.Picture
 drawFood world = G.color G.green (drawBox (food world) world)
 
 drawSnake :: World -> G.Picture
-drawSnake world = G.pictures (map (\ p -> drawBox p world) (snake world))
+drawSnake world = case snake world of
+    (p : ps) -> G.pictures
+        ( G.color G.orange (drawBox p world)
+        : map (\ x -> drawBox x world) ps
+        )
+    _ -> G.blank
 
 drawBox :: (Int, Int) -> World -> G.Picture
 drawBox (x, y) world =
