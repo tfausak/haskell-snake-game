@@ -1,6 +1,7 @@
 module Snake where
 
 import qualified Graphics.Gloss.Interface.Pure.Game as G
+import qualified System.Random as R
 
 main :: IO ()
 main = do
@@ -33,6 +34,7 @@ initialWorld = NewWorld
     , scale = 11
     , snake = [(0, 2), (0, 1), (0, 0), (0, -1), (0, -2)]
     , isOver = False
+    , gen = R.mkStdGen 0
     }
 
 drawWorld :: World -> G.Picture
@@ -115,7 +117,8 @@ data World = NewWorld
     , scale :: Int
     , snake :: [(Int, Int)]
     , isOver :: Bool
-    } deriving (Eq, Ord, Read, Show)
+    , gen :: R.StdGen
+    } deriving (Read, Show)
 
 size :: (Num a) => World -> a
 size world =
